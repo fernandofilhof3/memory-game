@@ -1,5 +1,5 @@
-<div (click)="rotateCard()" class="card-container">
-    <div [ngClass]="flipCard ? 'flip-poke-card' : ''"class="poke-card">
+<div (click)="clickCard()" class="card-container">
+    <div [ngClass]="card.fliped ? 'flip-poke-card' : ''" class="poke-card">
         <div class="card back"> 
             <div class="d-table card-style">
                 <div class="d-table-cell back">
@@ -10,7 +10,7 @@
         <div class="card front"> 
             <div class="d-table card-style">
                 <div class="d-table-cell front">
-                    <img class="back-logo" src="assets/images/pokemons/pikachu.png">
+                    <img class="back-logo" [src]="card.imgUrl">
                 </div>
             </div>
         </div>

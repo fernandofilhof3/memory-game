@@ -6,8 +6,8 @@
     </div>
     <div class="row">
         <div class="col">
-            <div class="game-area">
-                <app-card [card]="cardObj"></app-card>
+            <div *ngFor="let card of pokemonConst" class="game-area">
+                <app-card (onClick)="setCardValue(card)" [card]="card"></app-card>
             </div>
         </div>
     </div>

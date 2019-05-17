@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -6,18 +6,23 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit {
-  @Input() card: { cardImgUrl: string, cardValue: number };
-  public flipCard = false;
+  @Input() public card: { id: number, imgUrl: number, fliped: boolean };
+  @Output() public onClick = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
   }
 
-  rotateCard() {
-    if (!this.flipCard)
-      this.flipCard = true;
+  public flipCard() {
+    if (!this.card.fliped)
+      this.card.fliped = true;
     else
-      this.flipCard = false;
+      this.card.fliped = false;
+  }
+
+  public clickCard() {
+    this.flipCard();
+    this.onClick.emit();
   }
 
 }
