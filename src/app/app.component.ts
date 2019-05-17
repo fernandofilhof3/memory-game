@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'memory-game';
+  cardObj = {cardImgUrl: 'assets/images/ui/pikachu.png', cardValue: 0};
 }
