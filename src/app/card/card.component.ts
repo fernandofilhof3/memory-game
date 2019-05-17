@@ -7,9 +7,17 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class CardComponent implements OnInit {
   @Input() card: { cardImgUrl: string, cardValue: number };
+  public flipCard = false;
   constructor() { }
 
   ngOnInit() {
+  }
+
+  rotateCard() {
+    if (!this.flipCard)
+      this.flipCard = true;
+    else
+      this.flipCard = false;
   }
 
 }
