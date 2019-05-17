@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainScreenComponent implements OnInit {
 
+  public cardObj = {cardImgUrl: 'assets/images/ui/pikachu.png', cardValue: 0};
   constructor() { }
 
   ngOnInit() {
