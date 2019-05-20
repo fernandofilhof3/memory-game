@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { DispositionCard } from '../models/disposition-card.model';
 
 @Component({
   selector: 'app-card',
@@ -6,11 +7,17 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent implements OnInit {
-  @Input() public card: { id: number, imgUrl: number, fliped: boolean };
+  @Input() public card: DispositionCard;
   @Output() public onClick = new EventEmitter();
+
+  @HostBinding('style.left.px') private left = 0;
+  @HostBinding('style.top.px') private top = 0;
+
   constructor() { }
 
   ngOnInit() {
+    this.left = (this.card.j * 120);
+    this.top = (this.card.i * 180);
   }
 
   public flipCard() {

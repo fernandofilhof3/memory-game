@@ -5,9 +5,11 @@
         </div>
     </div>
     <div class="row">
-        <div class="col">
-            <div *ngFor="let card of pokemonConst" class="game-area">
-                <app-card (onClick)="setCardValue(card)" [card]="card"></app-card>
+        <div class="col-12">
+            <div class="game-area"
+            [style.height.px]="(cardList.length) * 180"
+            [style.width.px]="(cardList.length) * 120">
+                <app-card *ngFor="let card of cardList | dispositionCards" (onClick)="setCardValue(card)" [card]="card"></app-card>
             </div>
         </div>
     </div>

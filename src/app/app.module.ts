@@ -4,12 +4,14 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { CardComponent } from './card/card.component';
 import { MainScreenComponent } from './main-screen/main-screen.component';
+import { DispositionCardsPipe } from './pipes/disposition-cards.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     CardComponent,
-    MainScreenComponent
+    MainScreenComponent,
+    DispositionCardsPipe
   ],
   imports: [
     BrowserModule

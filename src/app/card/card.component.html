@@ -1,4 +1,4 @@
-<div (click)="clickCard()" class="card-container">
+<div (click)="clickCard()" [ngClass]="card.fliped ? 'no-click' : ''" class="card-container">
     <div [ngClass]="card.fliped ? 'flip-poke-card' : ''" class="poke-card">
         <div class="card back"> 
             <div class="d-table card-style">
