@@ -24,10 +24,10 @@
 	   </div>
         <div class="row btn-area">
             <div class="col-6">
-                <button class="btn btn-small" type="button">SIM</button>
+                <button class="btn btn-small" (click)="dialogRef.close(true)" type="button">SIM</button>
             </div>
             <div class="col-6">
-                <button class="btn btn-small" type="button">NÃO</button>
+                <button class="btn btn-small" (click)="dialogRef.close()" type="button">NÃO</button>
             </div>
         </div>
     </div>

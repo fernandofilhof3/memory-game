@@ -25,12 +25,6 @@ export class MainScreenComponent implements OnInit {
 
     ngOnInit() {
         this.createDeck();
-
-        this.dialogRef.open(ModalVictoryComponent, {
-                data: {
-                    body: 'Você conseguiu pegar todos! Isso que eu chamo de um verdadeiro mestre pokémon.'
-                }
-            });
     }
 
     public setCardValue(card: any) {
@@ -62,14 +56,13 @@ export class MainScreenComponent implements OnInit {
                 addedCards.push(card);
             }
         }
-        console.log(this.cardList);
     }
 
     private checkPair() {
         if (this.firstCard.id === this.secondCard.id) {
             this.firstCard = null;
             this.secondCard = null;
-            this.pairsFounded ++;
+            this.pairsFounded++;
             this.checkWinCondition();
         } else {
             setTimeout(() => {
@@ -83,13 +76,29 @@ export class MainScreenComponent implements OnInit {
 
     private checkWinCondition() {
         console.log(this.pairsFounded);
-        if (this.pairsFounded === 8) {
-            this.dialogRef.open(ModalVictoryComponent, {
-                data: {
-                    body: 'Parabens você capturou todos!'
-                }
-            });
+        let dialog;
+        if (this.pairsFounded === 4) {
+            setTimeout(() => {
+                dialog = this.dialogRef.open(ModalVictoryComponent, {
+                    data: {
+                        body: 'Parabens você capturou todos!'
+                    }
+                });
+                dialog.afterClosed().subscribe(ok => {
+                    if (ok)
+                        this.resetGame();
+                });
+            }, 470);
         }
+    }
+
+    private resetGame() {
+        console.log('RESET GAME');
+        this.pairsFounded = 0;
+        // this.cardList.forEach((lineCards) => {
+        //     lineCards.forEach((card) => card.fliped = false);
+        // });
+        this.createDeck();
     }
 
     private randomInterval(min: number, max: number) {
