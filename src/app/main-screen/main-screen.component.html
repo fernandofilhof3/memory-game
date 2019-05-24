@@ -9,7 +9,7 @@
             <div class="game-area"
             [style.height.px]="(cardList.length) * 180"
             [style.width.px]="(cardList.length) * 120">
-                <app-card *ngFor="let card of cardList | dispositionCards" (onClick)="setCardValue(card)" [card]="card"></app-card>
+                <app-card *ngFor="let card of cardList | dispositionCards" [reset]="reset" (onClick)="setCardValue(card)" [card]="card"></app-card>
             </div>
         </div>
     </div>

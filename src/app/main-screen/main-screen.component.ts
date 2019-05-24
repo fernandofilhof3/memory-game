@@ -16,8 +16,8 @@ export class MainScreenComponent implements OnInit {
     public firstCard: Card;
     public secondCard: Card;
 
+    public reset: boolean = false;
     private pairsFounded: number = 0;
-    private totalPairs: number = 0;
 
     constructor(
         private dialogRef: MatDialog
@@ -57,8 +57,7 @@ export class MainScreenComponent implements OnInit {
                 addedCards.push(card);
             }
         }
-        console.log(this.cardList);
-        
+
     }
 
     private checkPair() {
@@ -78,9 +77,8 @@ export class MainScreenComponent implements OnInit {
     }
 
     private checkWinCondition() {
-        console.log(this.pairsFounded);
         let dialog;
-        if (this.pairsFounded === 2) {
+        if (this.pairsFounded === 8) {
             setTimeout(() => {
                 dialog = this.dialogRef.open(ModalVictoryComponent, {
                     data: {
@@ -96,9 +94,11 @@ export class MainScreenComponent implements OnInit {
     }
 
     private resetGame() {
-        console.log('RESET GAME');
+        this.reset = true;
         this.pairsFounded = 0;
-        this.createDeck();
+        setTimeout(() => {
+            this.createDeck();
+        }, 400);
     }
 
     private randomInterval(min: number, max: number) {

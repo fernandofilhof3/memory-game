@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostBinding, OnChanges } from '@angular/core';
 import { DispositionCard } from '../models/disposition-card.model';
 
 @Component({
@@ -6,8 +6,9 @@ import { DispositionCard } from '../models/disposition-card.model';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent implements OnInit {
+export class CardComponent implements OnInit, OnChanges {
   @Input() public card: DispositionCard;
+  @Input() public reset: boolean;
   @Output() public onClick = new EventEmitter();
 
   @HostBinding('style.left.px') private left = 0;
@@ -18,6 +19,11 @@ export class CardComponent implements OnInit {
   ngOnInit() {
     this.left = (this.card.j * 120);
     this.top = (this.card.i * 180);
+  }
+
+  ngOnChanges() {
+    if (this.reset && this.card.fliped)
+      this.card.fliped = false;
   }
 
   public flipCard() {
