@@ -28,7 +28,7 @@ export class MainScreenComponent implements OnInit {
 
         this.dialogRef.open(ModalVictoryComponent, {
                 data: {
-                    body: 'Parabens você capturou todos!'
+                    body: 'Você conseguiu pegar todos! Isso que eu chamo de um verdadeiro mestre pokémon.'
                 }
             });
     }
