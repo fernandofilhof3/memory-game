@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PokemonsCards } from '../const/pokemons.const';
 import { Card } from '../models/card.model';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalVictoryComponent } from '../modals/modal-victory/modal-victory.component';
 
 @Component({
     selector: 'app-main-screen',
@@ -14,10 +16,21 @@ export class MainScreenComponent implements OnInit {
     public firstCard: Card;
     public secondCard: Card;
 
-    constructor() { }
+    private pairsFounded: number = 0;
+    private totalPairs: number = 0;
+
+    constructor(
+        private dialogRef: MatDialog
+    ) { }
 
     ngOnInit() {
         this.createDeck();
+
+        this.dialogRef.open(ModalVictoryComponent, {
+                data: {
+                    body: 'Parabens você capturou todos!'
+                }
+            });
     }
 
     public setCardValue(card: any) {
@@ -53,15 +66,29 @@ export class MainScreenComponent implements OnInit {
     }
 
     private checkPair() {
-        if (this.firstCard.id === this.secondCard.id)
-            console.log('Iguais');
-        else {
+        if (this.firstCard.id === this.secondCard.id) {
+            this.firstCard = null;
+            this.secondCard = null;
+            this.pairsFounded ++;
+            this.checkWinCondition();
+        } else {
             setTimeout(() => {
                 this.firstCard.fliped = false;
                 this.secondCard.fliped = false;
                 this.firstCard = null;
                 this.secondCard = null;
             }, 850);
+        }
+    }
+
+    private checkWinCondition() {
+        console.log(this.pairsFounded);
+        if (this.pairsFounded === 8) {
+            this.dialogRef.open(ModalVictoryComponent, {
+                data: {
+                    body: 'Parabens você capturou todos!'
+                }
+            });
         }
     }
 
