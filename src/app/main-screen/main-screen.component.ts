@@ -43,6 +43,7 @@ export class MainScreenComponent implements OnInit {
 
     private createDeck() {
         let addedCards = [];
+        this.cardList = [];
         for (let i = 0; i < 4; i++) {
             this.cardList[i] = [];
             for (let j = 0; j < 4; j++) {
@@ -56,6 +57,8 @@ export class MainScreenComponent implements OnInit {
                 addedCards.push(card);
             }
         }
+        console.log(this.cardList);
+        
     }
 
     private checkPair() {
@@ -77,7 +80,7 @@ export class MainScreenComponent implements OnInit {
     private checkWinCondition() {
         console.log(this.pairsFounded);
         let dialog;
-        if (this.pairsFounded === 4) {
+        if (this.pairsFounded === 2) {
             setTimeout(() => {
                 dialog = this.dialogRef.open(ModalVictoryComponent, {
                     data: {
@@ -95,9 +98,6 @@ export class MainScreenComponent implements OnInit {
     private resetGame() {
         console.log('RESET GAME');
         this.pairsFounded = 0;
-        // this.cardList.forEach((lineCards) => {
-        //     lineCards.forEach((card) => card.fliped = false);
-        // });
         this.createDeck();
     }
 
