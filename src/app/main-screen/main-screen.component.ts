@@ -17,7 +17,7 @@ export class MainScreenComponent implements OnInit {
     public pokemonConst = PokemonsCards;
     public cardList: Card[][] = [];
     public player: Player = new Player();
-    public hp: number = 10;
+    public hp: number = 13;
     public firstCard: Card;
     public secondCard: Card;
 
@@ -74,7 +74,7 @@ export class MainScreenComponent implements OnInit {
             this.pairsFounded++;
             this.checkWinCondition();
         } else {
-            this.player.hp -= card.attack;
+            this.player.hp -= this.firstCard.attack;
             this.checkWinCondition();
             setTimeout(() => {
                 this.firstCard.fliped = false;
@@ -87,7 +87,7 @@ export class MainScreenComponent implements OnInit {
 
     private checkWinCondition() {
         let dialog;
-        if (this.pairsFounded === 8 && this.player.hp > 0) {
+        if (this.pairsFounded === 9 && this.player.hp > 0) {
             setTimeout(() => {
                 dialog = this.dialogRef.open(ModalVictoryComponent, {
                     data: { win: true }
@@ -100,8 +100,6 @@ export class MainScreenComponent implements OnInit {
 
         } else if (this.player.hp <= 0) {
             setTimeout(() => {
-
-
                 dialog = this.dialogRef.open(ModalVictoryComponent, {
                     data: { win: false }
                 });
@@ -117,7 +115,7 @@ export class MainScreenComponent implements OnInit {
     private resetGame() {
         this.reset = true;
         this.pairsFounded = 0;
-        this.player.hp = 10;
+        this.player = new Player();
         setTimeout(() => {
             this.createDeck();
         }, 400);

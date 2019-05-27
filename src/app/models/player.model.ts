@@ -1,5 +1,5 @@
 export class Player {
-    hp: number = 10;
+    hp: number = 13;
 
     constructor(obj?: Partial<Player>) {
         if (obj)
