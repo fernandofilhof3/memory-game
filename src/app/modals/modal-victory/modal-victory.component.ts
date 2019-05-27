@@ -9,6 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ModalVictoryComponent implements OnInit {
 
     public text: string;
+    public title: string;
 
     constructor(
         private dialogRef: MatDialogRef<ModalVictoryComponent>,
@@ -16,8 +17,17 @@ export class ModalVictoryComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (this.data)
-            this.text = this.data.body;
+        this.setModalText();
+  }
+
+  private setModalText() {
+    if (this.data.win) {
+        this.title = 'Parabéns!';
+        this.text = 'Parabéns você capturou todos!';
+    } else {
+        this.title = 'Derrota';
+        this.text = 'Você não ganhou dessa vez, mas não desista.';
+    }
   }
 
 }

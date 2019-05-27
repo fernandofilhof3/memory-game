@@ -1,34 +1,37 @@
 <div class="mat-container">
-    <div class="mat-title">
-        <div class="row">
-            <div class="col-12">
-                <img class="img-header" src="assets/images/ui/insignia.png">
-                <img class="img-header bigger" src="assets/images/ui/insignia.png">
-                <img class="img-header" src="assets/images/ui/insignia.png">
-            </div>
-        </div>
-        <div class="row title">
-            <div class="col-12">
-                <span>Parabéns!</span>
-            </div>
-        </div>
+  <div class="mat-title">
+    <div class="row">
+      <div *ngIf="data.win" class="col-12">
+        <img class="img-header" src="assets/images/ui/insignia.png">
+        <img class="img-header bigger" src="assets/images/ui/insignia.png">
+        <img class="img-header" src="assets/images/ui/insignia.png">
+      </div>
+      <div *ngIf="!data.win"class="col-12">
+        <img class="img-header bigger" src="assets/images/ui/pikachu.png">
+      </div>
     </div>
-    <div class="mat-body">
-        <span>{{text}}</span>
+    <div class="row title">
+      <div class="col-12">
+        <span>{{title}}</span>
+      </div>
     </div>
-    <div class="mat-footer">
-       <div class="row">
-		   <div class="col">
-			    <span>Jogar novamente?</span>
-		   </div>
-	   </div>
-        <div class="row btn-area">
-            <div class="col-6">
-                <button class="btn btn-small" (click)="dialogRef.close(true)" type="button">SIM</button>
-            </div>
-            <div class="col-6">
-                <button class="btn btn-small" (click)="dialogRef.close()" type="button">NÃO</button>
-            </div>
-        </div>
+  </div>
+  <div class="mat-body">
+    <span>{{text}}</span>
+  </div>
+  <div class="mat-footer">
+    <div class="row">
+      <div class="col">
+        <span>Jogar novamente?</span>
+      </div>
     </div>
+    <div class="row btn-area">
+      <div class="col-6">
+        <button class="btn btn-small" (click)="dialogRef.close(true)" type="button">SIM</button>
+      </div>
+      <div class="col-6">
+        <button class="btn btn-small" (click)="dialogRef.close()" type="button">NÃO</button>
+      </div>
+    </div>
+  </div>
 </div>

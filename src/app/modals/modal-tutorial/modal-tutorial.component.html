@@ -1,0 +1,27 @@
+<div class="mat-container">
+  <div class="mat-title">
+    <div class="row title">
+      <div class="col-12">
+        <span>{{stepTitle}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="mat-body">
+    <div class="row">
+      <div class="col-12">
+        <span [innerHTML]="stepBody"></span>
+      </div>
+    </div>
+    <div *ngIf="showDescription" class="row row-description">
+      <div class="col-4">
+        <img class="img-tuto" [src]="imgUrl">
+      </div>
+      <div class="col text-description">
+        <span [innerHTML]="stepDescription"></span>
+      </div>
+    </div>
+  </div>
+  <div class="mat-footer">
+    <button class="btn btn-small" (click)="nextStep()" type="button">PRÓXIMO</button>
+  </div>
+</div>

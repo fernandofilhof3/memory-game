@@ -1,0 +1,64 @@
+.mat-container {
+  width: 540px;
+  height: auto;
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.mat-title {
+  margin: 0;
+  font-weight: bold;
+  color: #ffbf05;
+  font-size: 28px;
+  text-shadow: 3px 3px 0 #424242,
+    -1px -1px 0 #424242,
+    1px -1px 0 #424242,
+    -1px 1px 0 #424242,
+    1px 1px 0 #424242;
+
+  .row {
+    text-align: center;
+
+    &.title {
+      padding-top: 10px;
+    }
+  }
+}
+
+
+.w-100 {
+  width: 100%;
+}
+
+.text-description {
+  padding-top: 15px;
+  text-align: left;
+}
+
+.row-description {
+  padding-top: 15px;
+}
+
+.mat-body {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 200;
+  padding: 15px;
+}
+
+.img-tuto {
+  width: 64px;
+  height: 64px;
+}
+
+.mat-footer {
+  padding-bottom: 15px;
+  text-align: center;
+  font-weight: 200;
+  font-size: 20px;
+
+  .btn-area {
+    padding-top: 15px;
+  }
+}

@@ -8,6 +8,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MainScreenComponent } from './main-screen/main-screen.component';
 import { DispositionCardsPipe } from './pipes/disposition-cards.pipe';
 import { ModalVictoryComponent } from './modals/modal-victory/modal-victory.component';
+import { ModalGameStartComponent } from './modals/modal-game-start/modal-game-start.component';
+import { HpBarComponent } from './hp-bar/hp-bar.component';
+import { ModalTutorialComponent } from './modals/modal-tutorial/modal-tutorial.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +18,10 @@ import { ModalVictoryComponent } from './modals/modal-victory/modal-victory.comp
     CardComponent,
     MainScreenComponent,
     DispositionCardsPipe,
-    ModalVictoryComponent
+    ModalVictoryComponent,
+    ModalGameStartComponent,
+    HpBarComponent,
+    ModalTutorialComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +29,11 @@ import { ModalVictoryComponent } from './modals/modal-victory/modal-victory.comp
     BrowserAnimationsModule
   ],
   providers: [],
-  entryComponents: [ModalVictoryComponent],
+  entryComponents: [
+    ModalVictoryComponent,
+    ModalGameStartComponent,
+    ModalTutorialComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

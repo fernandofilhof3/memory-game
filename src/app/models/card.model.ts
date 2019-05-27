@@ -3,6 +3,8 @@ export class Card  {
     name: string;
     imgUrl: string;
     fliped: boolean;
+    skill: string;
+    attack: number;
 
     constructor(obj?: Partial<Card>) {
         if (obj)
