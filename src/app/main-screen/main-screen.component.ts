@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PokemonsCards } from '../const/pokemons.const';
-import { Card } from '../models/card.model';
+import { Card, CardSkill } from '../models/card.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalVictoryComponent } from '../modals/modal-victory/modal-victory.component';
 import { ModalGameStartComponent } from '../modals/modal-game-start/modal-game-start.component';
@@ -17,13 +17,14 @@ export class MainScreenComponent implements OnInit {
     public pokemonConst = PokemonsCards;
     public cardList: Card[][] = [];
     public player: Player = new Player();
-    public hp: number = 13;
     public firstCard: Card;
     public secondCard: Card;
+    private pairsFounded: number = 0;
 
+    public hp: number = 13;
     public reset: boolean = false;
     public start: boolean = false;
-    private pairsFounded: number = 0;
+    private currentRound: number = 0;
 
     constructor(
         private dialogRef: MatDialog
@@ -72,10 +73,8 @@ export class MainScreenComponent implements OnInit {
             this.firstCard = null;
             this.secondCard = null;
             this.pairsFounded++;
-            this.checkWinCondition();
         } else {
-            this.player.hp -= this.firstCard.attack;
-            this.checkWinCondition();
+            this.applyDamage(this.firstCard.skill);
             setTimeout(() => {
                 this.firstCard.fliped = false;
                 this.secondCard.fliped = false;
@@ -83,6 +82,7 @@ export class MainScreenComponent implements OnInit {
                 this.secondCard = null;
             }, 850);
         }
+        this.checkWinCondition();
     }
 
     private checkWinCondition() {
@@ -108,6 +108,29 @@ export class MainScreenComponent implements OnInit {
                         this.resetGame();
                 });
             }, 470);
+        }
+    }
+
+    private applyDamage(skill: CardSkill) {
+        if (skill.burn) {
+            this.player.hp -= skill.damage;
+            this.player.status = 1;
+        } else if (skill.confusion) {
+            // console.log(skill);
+        } else if (skill.multiStrike) {
+            const hits = this.randomInterval(1, 3);
+            this.player.hp -= skill.damage * hits;
+        } else if (skill.teleport) {
+            // console.log(skill);
+        } else
+            this.player.hp -= skill.damage;
+
+    }
+
+    private checkPlayerStatus() {
+        if (this.player.status === 1) {
+            this.player.hp --;
+
         }
     }
 
