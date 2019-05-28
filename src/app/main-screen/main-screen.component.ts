@@ -21,10 +21,15 @@ export class MainScreenComponent implements OnInit {
     public secondCard: Card;
     private pairsFounded: number = 0;
 
-    public hp: number = 13;
+    public statusList: string[] = [];
+    public hp: number = 20;
     public reset: boolean = false;
     public start: boolean = false;
-    private currentRound: number = 0;
+
+    private effects = {
+        currentRound: 0,
+        effectDuration: 0
+    };
 
     constructor(
         private dialogRef: MatDialog
@@ -35,18 +40,12 @@ export class MainScreenComponent implements OnInit {
         this.openModalTutorial();
     }
 
-    public setCardValue(card: any) {
-        if (!this.firstCard || !this.secondCard) {
-            if (!this.firstCard)
-                this.firstCard = card;
-            else {
-                this.secondCard = card;
-                this.checkPair(card);
+    private openModalTutorial() {
+        this.dialogRef.open(ModalGameStartComponent).afterClosed().subscribe(ok => {
+            if (ok) {
+                this.dialogRef.open(ModalTutorialComponent);
             }
-        } else {
-            card.fliped = false;
-        }
-
+        });
     }
 
     private createDeck() {
@@ -68,23 +67,96 @@ export class MainScreenComponent implements OnInit {
 
     }
 
+    public setCardValue(card: any) {
+        if (!this.firstCard || !this.secondCard) {
+            if (!this.firstCard)
+                this.firstCard = card;
+            else {
+                this.secondCard = card;
+                this.checkPair(card);
+            }
+        } else {
+            card.fliped = false;
+        }
+
+    }
+
+
     private checkPair(card: Card) {
         if (this.firstCard.id === this.secondCard.id) {
             this.firstCard = null;
             this.secondCard = null;
             this.pairsFounded++;
+
         } else {
-            this.applyDamage(this.firstCard.skill);
             setTimeout(() => {
+                this.applyDamage(this.firstCard.skill);
+                this.checkWinCondition();
                 this.firstCard.fliped = false;
                 this.secondCard.fliped = false;
                 this.firstCard = null;
                 this.secondCard = null;
             }, 850);
         }
-        this.checkWinCondition();
+        this.effects.currentRound++;
+        this.checkPlayerStatus();
     }
 
+    private applyDamage(skill: CardSkill) {
+        this.player.hp -= skill.damage;
+        if (skill.burn) {
+            const chance = this.randomInterval(0, 3);
+            if (chance > 0) {
+                this.player.status = 1;
+                this.statusList.push(skill.imgUrl);
+                this.effects.effectDuration = this.effects.currentRound + skill.duration;
+            }
+
+        } else if (skill.confusion) {
+            const chance = this.randomInterval(0, 2);
+            // if (chance > 1)
+            //     this.player.status = 3;
+
+        } else if (skill.multiStrike) {
+            const hits = this.randomInterval(1, 3);
+            this.player.hp -= skill.damage * hits;
+
+        } else if (skill.teleport) {
+            console.log(skill);
+        } else
+            this.player.hp -= skill.damage;
+
+    }
+
+    // ON TURN START
+    private checkPlayerStatus() {
+        if (this.player.status === 1) {
+            this.applyEffects(1);
+        }
+        else if (this.player.status === 2)
+            this.applyEffects(2);
+    }
+
+    private applyEffects(damage: number) {
+        if (this.effects.effectDuration > this.effects.currentRound)
+            this.player.hp -= damage;
+        else {
+            this.player.status = 0;
+            this.statusList = [];
+        }
+    }
+
+
+    private resetGame() {
+        this.reset = true;
+        this.pairsFounded = 0;
+        this.player = new Player();
+        setTimeout(() => {
+            this.createDeck();
+        }, 400);
+    }
+
+    // ON TURN END
     private checkWinCondition() {
         let dialog;
         if (this.pairsFounded === 9 && this.player.hp > 0) {
@@ -107,50 +179,12 @@ export class MainScreenComponent implements OnInit {
                     if (ok)
                         this.resetGame();
                 });
+                return;
             }, 470);
         }
     }
 
-    private applyDamage(skill: CardSkill) {
-        if (skill.burn) {
-            this.player.hp -= skill.damage;
-            this.player.status = 1;
-        } else if (skill.confusion) {
-            // console.log(skill);
-        } else if (skill.multiStrike) {
-            const hits = this.randomInterval(1, 3);
-            this.player.hp -= skill.damage * hits;
-        } else if (skill.teleport) {
-            // console.log(skill);
-        } else
-            this.player.hp -= skill.damage;
 
-    }
-
-    private checkPlayerStatus() {
-        if (this.player.status === 1) {
-            this.player.hp --;
-
-        }
-    }
-
-
-    private resetGame() {
-        this.reset = true;
-        this.pairsFounded = 0;
-        this.player = new Player();
-        setTimeout(() => {
-            this.createDeck();
-        }, 400);
-    }
-
-    private openModalTutorial() {
-        this.dialogRef.open(ModalGameStartComponent).afterClosed().subscribe(ok => {
-            if (ok) {
-                this.dialogRef.open(ModalTutorialComponent);
-            }
-        });
-    }
 
     private randomInterval(min: number, max: number) {
         return Math.floor(Math.random() * (max - min + 1) + min);

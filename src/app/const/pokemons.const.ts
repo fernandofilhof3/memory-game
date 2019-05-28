@@ -22,7 +22,8 @@ export const PokemonsCards: Partial<Card>[] = [
         skill: {
             damage: 2,
             burn: true,
-            duration: 2
+            duration: 2,
+            imgUrl: 'assets/images/ui/fire.gif'
         }
     },
     {

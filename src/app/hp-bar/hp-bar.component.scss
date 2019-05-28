@@ -23,10 +23,27 @@
     transition: all .300s ease-in;
   }
 
+  .hp-info{
+    text-align: right;
+    padding-top: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
   .info {
     padding-top: 10px;
     font-size: 16px;
     font-weight: 300;
+  }
+
+  .player-status {
+    padding-top: 14px;
+    text-align: left;
+    .status-img {
+      width: 26px;
+      height: 26px;
+    }
   }
 
 }

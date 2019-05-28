@@ -6,6 +6,7 @@ export class CardSkill {
     burn?: boolean;
     confusion?: boolean;
     teleport?: boolean;
+    imgUrl?: string;
 
     constructor(obj?: Partial<CardSkill>) {
         if (obj)

@@ -1,3 +1,13 @@
 <div class="bar"></div>
-<div class="hp-level" [style.backgroundColor]="'hsl(' + hpStatusColor + ', 73%, 50%)'"[style.width]="percentage + '%'"></div>
-<p class="info">{{value}}/{{total}} HP</p>
+<div class="hp-level" [style.backgroundColor]="'hsl(' + hpStatusColor + ', 73%, 50%)'" [style.width]="percentage + '%'">
+</div>
+<div class="row">
+  <div *ngIf="statusList.length > 0" class="player-status">
+      <div *ngFor="let imgUrl of statusList" class="col">
+          <img class="status-img" [src]="imgUrl">
+      </div>
+  </div>
+  <div class="col hp-info">
+    <p>{{value >= 0 ? value : 0}}/{{total}} HP</p>
+  </div>
+</div>

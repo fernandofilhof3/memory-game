@@ -31,7 +31,7 @@ export class ModalTutorialComponent implements OnInit {
       this.stepTitle = 'Jogador';
       this.showDescription = false;
       this.stepBody = `O jogador é representado por uma barra de vida encontrada no canto inferior direito da tela.
-      <br/>A barra possui <strong>10 de HP</strong> e diminui toda vez que você erra ao formar um par.`;
+      <br/>A barra possui <strong>20 de HP</strong> e diminui toda vez que você erra ao formar um par.`;
     }
     else if (this.currentStep === 3) {
       this.stepTitle = 'Mecânica';
