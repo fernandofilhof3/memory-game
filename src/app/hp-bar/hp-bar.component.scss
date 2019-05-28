@@ -23,7 +23,7 @@
     transition: all .300s ease-in;
   }
 
-  .hp-info{
+  .hp-info {
     text-align: right;
     padding-top: 10px;
     margin-right: 10px;
@@ -39,7 +39,10 @@
 
   .player-status {
     padding-top: 14px;
+    max-width: 26px;
+    max-height: 26px;
     text-align: left;
+
     .status-img {
       width: 26px;
       height: 26px;
