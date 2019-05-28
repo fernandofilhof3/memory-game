@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-12">
             <div class="game-area" [style.height.px]="(cardList.length) * 180" [style.width.px]="(cardList[0].length) * 120">
-                <app-card *ngFor="let card of cardList | dispositionCards" [reset]="reset" (onClick)="setCardValue(card)"
+                <app-card *ngFor="let card of cardList | dispositionCards" [reset]="reset" (onClick)="setCardValue($event)"
                     [card]="card"></app-card>
             </div>
         </div>

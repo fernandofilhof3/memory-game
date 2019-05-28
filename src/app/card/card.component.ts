@@ -35,7 +35,7 @@ export class CardComponent implements OnInit, OnChanges {
 
   public clickCard() {
     this.flipCard();
-    this.onClick.emit();
+    this.onClick.emit(this.card);
   }
 
 }

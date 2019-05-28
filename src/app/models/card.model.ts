@@ -17,7 +17,8 @@ export class Card {
     id: number;
     name: string;
     imgUrl: string;
-    fliped: boolean;
+    fliped: boolean = true;
+    animation: string;
     skill: CardSkill;
 
     constructor(obj?: Partial<Card>) {
