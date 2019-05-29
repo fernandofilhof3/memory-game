@@ -17,7 +17,7 @@ export class Card {
     id: number;
     name: string;
     imgUrl: string;
-    fliped: boolean = true;
+    fliped: boolean;
     animation: string;
     skill: CardSkill;
 

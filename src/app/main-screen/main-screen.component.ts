@@ -51,20 +51,25 @@ export class MainScreenComponent implements OnInit {
     private createDeck() {
         let addedCards = [];
         this.cardList = [];
-        for (let i = 0; i < 3; i++) {
+        let iMax = 2;
+        let jMax = 5;
+        for (let i = 0; i <= iMax; i++) {
             this.cardList[i] = [];
-            for (let j = 0; j < 6; j++) {
+            let canNext = false;
+            for (let j = 0; j <= jMax; j++) {
                 let card = null,
                     min = 0,
                     max = PokemonsCards.length - 1;
                 do {
                     card = PokemonsCards[this.randomInterval(min, max)];
-                } while (addedCards.filter((x) => x.id === card.id).length >= 2)
+
+                    let cardAmount = addedCards.filter((x) => x.id === card.id).length;
+                    canNext = cardAmount === 1 || (cardAmount === 0 && !(i === iMax && j === jMax));
+                } while (!canNext);
                 this.cardList[i][j] = card;
                 addedCards.push(card);
             }
         }
-
     }
 
     public setCardValue(card: any) {
@@ -114,8 +119,6 @@ export class MainScreenComponent implements OnInit {
 
         } else if (skill.confusion) {
             const chance = this.randomInterval(0, 2);
-            // if (chance > 1)
-            //     this.player.status = 3;
 
         } else if (skill.multiStrike) {
             const hits = this.randomInterval(1, 3);
@@ -123,9 +126,7 @@ export class MainScreenComponent implements OnInit {
 
         } else if (skill.teleport) {
             console.log(skill);
-        } else
-            this.player.hp -= skill.damage;
-
+        }
     }
 
     // ON TURN START
