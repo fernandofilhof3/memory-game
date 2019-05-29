@@ -107,18 +107,20 @@ export class MainScreenComponent implements OnInit {
     }
 
     private applyDamage(damage: number, skill?: string) {
-        this.player.hp -= damage;
-        this.avatarAnimation = skill ? skill : 'strike';
+        setTimeout(() => {
+            this.player.hp -= damage;
+            this.avatarAnimation = skill ? skill : 'strike';
+        }, 250);
         setTimeout(() => {
             this.avatarAnimation = '';
-        }, 400);
+        }, 600);
     }
 
     private resetFirstcard() {
         setTimeout(() => {
             this.firstCard.fliped = false;
             this.firstCard = null;
-        }, 400);
+        }, 850);
     }
 
     private checkPokemonSkill(skill: CardSkill) {
