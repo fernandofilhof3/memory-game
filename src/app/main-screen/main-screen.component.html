@@ -1,6 +1,6 @@
 <div class="main-container">
     <div class="row player-area">
-        <div class="col-12">
+        <div [ngClass]="avatarAnimation" class="col-12">
             <img class="avatar" src="assets/images/ui/player.png">
             <div class="hp-status">
                 <app-hp-bar [total]="hp" [status-list]="statusList" [value]="player.hp"></app-hp-bar>

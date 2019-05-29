@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { PokemonsCards } from '../const/pokemons.const';
 import { Card, CardSkill } from '../models/card.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,6 +20,7 @@ export class MainScreenComponent implements OnInit {
     public firstCard: Card;
     public secondCard: Card;
     private pairsFounded: number = 0;
+    public avatarAnimation: string = '';
 
     public statusList: string[] = [];
     public hp: number = 20;
@@ -64,7 +65,7 @@ export class MainScreenComponent implements OnInit {
                     card = PokemonsCards[this.randomInterval(min, max)];
 
                     let cardAmount = addedCards.filter((x) => x.id === card.id).length;
-                    canNext = cardAmount === 1 || (cardAmount === 0 && !(i === iMax && j === jMax));
+                    canNext = cardAmount === 1 || (cardAmount === 0 && !(i === iMax && j === (jMax - 2)));
                 } while (!canNext);
                 this.cardList[i][j] = card;
                 addedCards.push(card);
@@ -92,14 +93,12 @@ export class MainScreenComponent implements OnInit {
             this.firstCard = null;
             this.secondCard = null;
             this.pairsFounded++;
-
+            this.checkWinCondition();
         } else {
             setTimeout(() => {
-                this.applyDamage(this.firstCard.skill);
+                this.checkPokemonSkill(this.firstCard.skill);
                 this.checkWinCondition();
-                this.firstCard.fliped = false;
                 this.secondCard.fliped = false;
-                this.firstCard = null;
                 this.secondCard = null;
             }, 850);
         }
@@ -107,8 +106,23 @@ export class MainScreenComponent implements OnInit {
         this.checkPlayerStatus();
     }
 
-    private applyDamage(skill: CardSkill) {
-        this.player.hp -= skill.damage;
+    private applyDamage(damage: number, skill?: string) {
+        this.player.hp -= damage;
+        this.avatarAnimation = skill ? skill : 'strike';
+        setTimeout(() => {
+            this.avatarAnimation = '';
+        }, 400);
+    }
+
+    private resetFirstcard() {
+        setTimeout(() => {
+            this.firstCard.fliped = false;
+            this.firstCard = null;
+        }, 400);
+    }
+
+    private checkPokemonSkill(skill: CardSkill) {
+        this.applyDamage(skill.damage);
         if (skill.burn) {
             const chance = this.randomInterval(0, 3);
             if (chance > 0) {
@@ -116,16 +130,21 @@ export class MainScreenComponent implements OnInit {
                 this.statusList.push(skill.imgUrl);
                 this.effects.effectDuration = this.effects.currentRound + skill.duration;
             }
-
+            this.resetFirstcard();
         } else if (skill.confusion) {
             const chance = this.randomInterval(0, 2);
+            this.firstCard.fliped = false;
+            this.firstCard = null;
 
         } else if (skill.multiStrike) {
-            const hits = this.randomInterval(1, 3);
-            this.player.hp -= skill.damage * hits;
+            const hits = this.randomInterval(2, 3);
+            this.applyDamage(skill.damage * hits);
+            this.resetFirstcard();
 
         } else if (skill.teleport) {
             console.log(skill);
+        } else {
+            this.resetFirstcard();
         }
     }
 
@@ -139,8 +158,9 @@ export class MainScreenComponent implements OnInit {
     }
 
     private applyEffects(damage: number) {
-        if (this.effects.effectDuration > this.effects.currentRound)
-            this.player.hp -= damage;
+        if (this.effects.effectDuration > this.effects.currentRound) {
+            this.applyDamage(damage);
+        }
         else {
             this.player.status = 0;
             this.statusList = [];
@@ -151,6 +171,7 @@ export class MainScreenComponent implements OnInit {
     private resetGame() {
         this.reset = true;
         this.pairsFounded = 0;
+        this.statusList = [];
         this.player = new Player();
         setTimeout(() => {
             this.createDeck();

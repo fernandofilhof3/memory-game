@@ -5,8 +5,7 @@ export const PokemonsCards: Partial<Card>[] = [
         id: 0,
         imgUrl: 'assets/images/pokemons/pikachu.png',
         skill: {
-            damage: 1,
-
+            damage: 2,
         }
     },
     {
@@ -67,8 +66,15 @@ export const PokemonsCards: Partial<Card>[] = [
         id: 8,
         imgUrl: 'assets/images/pokemons/mankey.png',
         skill: {
-            damage: 2,
+            damage: 1,
             multiStrike: true
         }
-    }
+    },
+    // {
+    //     id: 9,
+    //     imgUrl: 'assets/images/pokemons/pidgey.png',
+    //     skill: {
+    //         damage: 1,
+    //     }
+    // }
 ];
