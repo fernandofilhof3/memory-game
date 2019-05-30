@@ -2,10 +2,7 @@
 export class CardSkill {
     damage: number;
     duration?: number;
-    multiStrike?: boolean;
-    burn?: boolean;
-    confusion?: boolean;
-    teleport?: boolean;
+    name?: string;
     imgUrl?: string;
 
     constructor(obj?: Partial<CardSkill>) {

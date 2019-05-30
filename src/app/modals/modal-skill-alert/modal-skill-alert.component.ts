@@ -7,6 +7,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./modal-skill-alert.component.scss']
 })
 export class ModalSkillAlertComponent implements OnInit {
+  public pokemon: string = '';
+  public skill: string = '';
 
   constructor(
     private dialogRef: MatDialogRef<ModalSkillAlertComponent>,
@@ -14,9 +16,14 @@ export class ModalSkillAlertComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.data);
+    if (this.data) {
+      this.skill = this.data.skill;
+      this.pokemon = this.data.pokemon;
+    }
     setTimeout(() => {
       this.dialogRef.close();
-    }, 1800);
+    }, 1400);
   }
 
 }

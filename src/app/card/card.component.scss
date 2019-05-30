@@ -53,6 +53,12 @@
 .back-logo {
   width: 54px;
   height: 54px;
+  opacity: 1;
+  transition: opacity .8s ease-in-out;
+  &.teleport {
+    opacity: 0;
+  }
+  
 }
 
 .d-table {
@@ -78,6 +84,10 @@
     border-radius: 8px;
     background-color: #d70809e0;
     box-sizing: border-box;
+  }
+
+  &.teleport {
+    background-color: #ffc400e0 !important;
   }
 
   &.front {}

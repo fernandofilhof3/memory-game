@@ -7,7 +7,7 @@ import { DispositionCard } from '../models/disposition-card.model';
 })
 export class DispositionCardsPipe implements PipeTransform {
 
-	transform(value: Card[][]): any {
+	transform(value: Card[][], changed?: boolean): any {
 		return value.reduce((prev, curr, i) => {
 			return prev.concat(curr.map((card, j) => (new DispositionCard({
 				...card,

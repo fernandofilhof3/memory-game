@@ -7,6 +7,9 @@ import { ModalGameStartComponent } from '../modals/modal-game-start/modal-game-s
 import { Player } from '../models/player.model';
 import { ModalTutorialComponent } from '../modals/modal-tutorial/modal-tutorial.component';
 import { ModalSkillAlertComponent } from '../modals/modal-skill-alert/modal-skill-alert.component';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { DispositionCard } from '../models/disposition-card.model';
 
 @Component({
     selector: 'app-main-screen',
@@ -27,6 +30,9 @@ export class MainScreenComponent implements OnInit {
     public hp: number = 20;
     public reset: boolean = false;
     public start: boolean = false;
+    public changed: boolean = false;
+
+    private exceptionList: Card[] = [];
 
     private effects = {
         currentRound: 0,
@@ -41,6 +47,8 @@ export class MainScreenComponent implements OnInit {
         this.createDeck();
         this.openModalTutorial();
     }
+
+
 
     private openModalTutorial() {
         this.dialogRef.open(ModalGameStartComponent).afterClosed().subscribe(ok => {
@@ -74,6 +82,23 @@ export class MainScreenComponent implements OnInit {
         }
     }
 
+    private teleport(card: Card) {
+        let originCard: any = card;
+        let destinyCard;
+        let next = false;
+        let i = this.randomInterval(0, 2);
+        let j = this.randomInterval(0, 5);
+        do {
+            if (this.exceptionList.some(exception => exception.id !== this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
+                destinyCard = this.cardList[i][j];
+                next = true;
+            }
+        } while (!next);
+        this.cardList[originCard.i][originCard.j] = destinyCard;
+        this.cardList[i][j] = originCard;
+        console.log(this.cardList);
+    }
+
     public setCardValue(card: any) {
         if (!this.firstCard || !this.secondCard) {
             if (!this.firstCard)
@@ -94,11 +119,11 @@ export class MainScreenComponent implements OnInit {
             this.firstCard = null;
             this.secondCard = null;
             this.pairsFounded++;
+            this.exceptionList.push(card);
             this.checkWinCondition();
         } else {
             setTimeout(() => {
                 this.checkPokemonSkill(this.firstCard.skill);
-                this.checkWinCondition();
                 this.secondCard.fliped = false;
                 this.secondCard = null;
             }, 850);
@@ -108,13 +133,17 @@ export class MainScreenComponent implements OnInit {
     }
 
     private applyDamage(damage: number, skill?: string) {
-        setTimeout(() => {
-            this.player.hp -= damage;
-            this.avatarAnimation = skill ? skill : 'strike';
-        }, 250);
-        setTimeout(() => {
-            this.avatarAnimation = '';
-        }, 600);
+        return new Observable((subscriber) => {
+            setTimeout(() => {
+                this.player.hp -= damage;
+                this.avatarAnimation = skill ? skill : 'strike';
+                this.checkWinCondition();
+                subscriber.next();
+            }, 250);
+            setTimeout(() => {
+                this.avatarAnimation = '';
+            }, 600);
+        });
     }
 
     private resetFirstcard() {
@@ -125,34 +154,40 @@ export class MainScreenComponent implements OnInit {
     }
 
     private checkPokemonSkill(skill: CardSkill) {
-        this.applyDamage(skill.damage);
-        if (skill.burn) {
-            const chance = this.randomInterval(0, 3);
-            if (chance > 0) {
-                this.player.status = 1;
-                this.statusList.push(skill.imgUrl);
-                this.effects.effectDuration = this.effects.currentRound + skill.duration;
-                this.openModalSkill();
-            }
-            this.resetFirstcard();
-        } else if (skill.confusion) {
-            const chance = this.randomInterval(0, 2);
-            this.firstCard.fliped = false;
-            this.firstCard = null;
+        this.applyDamage(skill.damage).pipe(
+            tap(() => {
+                if (this.player.hp > 0) {
+                    if (skill.name === 'burn') {
+                        const chance = this.randomInterval(0, 3);
+                        if (chance > 0) {
+                            this.player.status = 1;
+                            this.statusList.push(skill.imgUrl);
+                            this.effects.effectDuration = this.effects.currentRound + skill.duration;
+                            this.openModalSkill(skill);
+                        }
+                        this.resetFirstcard();
+                    } else if (skill.name === 'confusion') {
+                        const chance = this.randomInterval(0, 5);
+                        this.firstCard.fliped = false;
+                        this.firstCard = null;
 
-        } else if (skill.multiStrike) {
-            const hits = this.randomInterval(2, 3);
-            this.applyDamage(skill.damage * hits);
-            this.openModalSkill();
-            this.resetFirstcard();
+                    } else if (skill.name === 'multiStrike') {
+                        const hits = this.randomInterval(2, 3);
+                        this.applyDamage(skill.damage * hits).subscribe();
+                        this.openModalSkill(skill);
+                        this.resetFirstcard();
 
-        } else if (skill.teleport) {
-            console.log(skill);
-            this.openModalSkill();
-        } else {
-            this.firstCard.fliped = false;
-            this.firstCard = null;
-        }
+                    } else if (skill.name === 'teleport') {
+                        this.firstCard.animation = 'teleport';
+                        this.teleport(this.firstCard);
+                        // this.openModalSkill(skill);
+                    } else {
+                        this.firstCard.fliped = false;
+                        this.firstCard = null;
+                    }
+                }
+            })
+        ).subscribe();
     }
 
     // ON TURN START
@@ -166,7 +201,7 @@ export class MainScreenComponent implements OnInit {
 
     private applyEffects(damage: number) {
         if (this.effects.effectDuration > this.effects.currentRound) {
-            this.applyDamage(damage);
+            this.applyDamage(damage).subscribe();
             this.checkWinCondition();
         }
         else {
@@ -177,7 +212,10 @@ export class MainScreenComponent implements OnInit {
 
     private openModalSkill(skill?: any) {
         this.dialogRef.open(ModalSkillAlertComponent, {
-            data: { skill: {} }
+            data: {
+                skill: skill,
+                pokemon: this.firstCard.name
+            }
         });
     }
 

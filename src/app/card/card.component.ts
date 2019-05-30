@@ -25,7 +25,7 @@ export class CardComponent implements OnInit, OnChanges {
     if (this.reset && this.card.fliped)
       this.card.fliped = false;
   }
-
+  
   public flipCard() {
     if (!this.card.fliped)
       this.card.fliped = true;

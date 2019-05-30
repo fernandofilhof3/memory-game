@@ -1,7 +1,7 @@
 <div class="main-container">
     <div class="row player-area">
         <div [ngClass]="avatarAnimation" class="col-12">
-            <img class="avatar" src="assets/images/ui/player.png">
+            <img (click)="change()" class="avatar" src="assets/images/ui/player.png">
             <div class="hp-status">
                 <app-hp-bar [total]="hp" [status-list]="statusList" [value]="player.hp"></app-hp-bar>
             </div>
@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-12">
             <div class="game-area" [style.height.px]="(cardList.length) * 180" [style.width.px]="(cardList[0].length) * 120">
-                <app-card *ngFor="let card of cardList | dispositionCards" [reset]="reset" (onClick)="setCardValue($event)"
+                <app-card *ngFor="let card of cardList | dispositionCards:changed" [reset]="reset" (onClick)="setCardValue($event)"
                     [card]="card"></app-card>
             </div>
         </div>
