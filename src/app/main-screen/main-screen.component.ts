@@ -6,6 +6,7 @@ import { ModalVictoryComponent } from '../modals/modal-victory/modal-victory.com
 import { ModalGameStartComponent } from '../modals/modal-game-start/modal-game-start.component';
 import { Player } from '../models/player.model';
 import { ModalTutorialComponent } from '../modals/modal-tutorial/modal-tutorial.component';
+import { ModalSkillAlertComponent } from '../modals/modal-skill-alert/modal-skill-alert.component';
 
 @Component({
     selector: 'app-main-screen',
@@ -120,7 +121,7 @@ export class MainScreenComponent implements OnInit {
         setTimeout(() => {
             this.firstCard.fliped = false;
             this.firstCard = null;
-        }, 850);
+        }, 1200);
     }
 
     private checkPokemonSkill(skill: CardSkill) {
@@ -131,6 +132,7 @@ export class MainScreenComponent implements OnInit {
                 this.player.status = 1;
                 this.statusList.push(skill.imgUrl);
                 this.effects.effectDuration = this.effects.currentRound + skill.duration;
+                this.openModalSkill();
             }
             this.resetFirstcard();
         } else if (skill.confusion) {
@@ -141,12 +143,15 @@ export class MainScreenComponent implements OnInit {
         } else if (skill.multiStrike) {
             const hits = this.randomInterval(2, 3);
             this.applyDamage(skill.damage * hits);
+            this.openModalSkill();
             this.resetFirstcard();
 
         } else if (skill.teleport) {
             console.log(skill);
+            this.openModalSkill();
         } else {
-            this.resetFirstcard();
+            this.firstCard.fliped = false;
+            this.firstCard = null;
         }
     }
 
@@ -162,11 +167,18 @@ export class MainScreenComponent implements OnInit {
     private applyEffects(damage: number) {
         if (this.effects.effectDuration > this.effects.currentRound) {
             this.applyDamage(damage);
+            this.checkWinCondition();
         }
         else {
             this.player.status = 0;
             this.statusList = [];
         }
+    }
+
+    private openModalSkill(skill?: any) {
+        this.dialogRef.open(ModalSkillAlertComponent, {
+            data: { skill: {} }
+        });
     }
 
 

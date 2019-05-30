@@ -11,6 +11,7 @@ import { ModalVictoryComponent } from './modals/modal-victory/modal-victory.comp
 import { ModalGameStartComponent } from './modals/modal-game-start/modal-game-start.component';
 import { HpBarComponent } from './hp-bar/hp-bar.component';
 import { ModalTutorialComponent } from './modals/modal-tutorial/modal-tutorial.component';
+import { ModalSkillAlertComponent } from './modals/modal-skill-alert/modal-skill-alert.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { ModalTutorialComponent } from './modals/modal-tutorial/modal-tutorial.c
     ModalVictoryComponent,
     ModalGameStartComponent,
     HpBarComponent,
-    ModalTutorialComponent
+    ModalTutorialComponent,
+    ModalSkillAlertComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,8 @@ import { ModalTutorialComponent } from './modals/modal-tutorial/modal-tutorial.c
   entryComponents: [
     ModalVictoryComponent,
     ModalGameStartComponent,
-    ModalTutorialComponent
+    ModalTutorialComponent,
+    ModalSkillAlertComponent
   ],
   bootstrap: [AppComponent]
 })
