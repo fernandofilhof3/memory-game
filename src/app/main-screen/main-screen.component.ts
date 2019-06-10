@@ -82,21 +82,49 @@ export class MainScreenComponent implements OnInit {
         }
     }
 
+    private arrayChanged() {
+        this.changed = !this.changed;
+    }
+
     private teleport(card: Card) {
+
         let originCard: any = card;
         let destinyCard;
         let next = false;
         let i = this.randomInterval(0, 2);
         let j = this.randomInterval(0, 5);
+
         do {
-            if (this.exceptionList.some(exception => exception.id !== this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
-                destinyCard = this.cardList[i][j];
-                next = true;
+            if (this.exceptionList.length > 0) {
+                if (this.exceptionList.some(exception => exception.id !== this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
+                    destinyCard = this.cardList[i][j];
+                    next = true;
+                } else {
+                    i = this.randomInterval(0, 2);
+                    j = this.randomInterval(0, 5);
+                }
+            } else {
+                if (this.cardList[i][j].id !== originCard.id) {
+                    destinyCard = this.cardList[i][j];
+                    next = true;
+                } else {
+                    i = this.randomInterval(0, 2);
+                    j = this.randomInterval(0, 5);
+                }
             }
         } while (!next);
         this.cardList[originCard.i][originCard.j] = destinyCard;
         this.cardList[i][j] = originCard;
-        console.log(this.cardList);
+
+        setTimeout(() => {
+            this.firstCard.fliped = false;
+            this.firstCard.animation = '';
+            setTimeout(() => {
+                this.firstCard = null;
+                this.arrayChanged();
+                this.openModalSkill(originCard.skill, originCard.name);
+            }, 250);
+        }, 700);
     }
 
     public setCardValue(card: any) {
@@ -146,11 +174,11 @@ export class MainScreenComponent implements OnInit {
         });
     }
 
-    private resetFirstcard() {
+    private resetFirstcard(time?: number) {
         setTimeout(() => {
             this.firstCard.fliped = false;
             this.firstCard = null;
-        }, 1200);
+        }, time ? time : 1200);
     }
 
     private checkPokemonSkill(skill: CardSkill) {
@@ -163,7 +191,7 @@ export class MainScreenComponent implements OnInit {
                             this.player.status = 1;
                             this.statusList.push(skill.imgUrl);
                             this.effects.effectDuration = this.effects.currentRound + skill.duration;
-                            this.openModalSkill(skill);
+                            this.openModalSkill(skill, this.firstCard.name);
                         }
                         this.resetFirstcard();
                     } else if (skill.name === 'confusion') {
@@ -174,13 +202,12 @@ export class MainScreenComponent implements OnInit {
                     } else if (skill.name === 'multiStrike') {
                         const hits = this.randomInterval(2, 3);
                         this.applyDamage(skill.damage * hits).subscribe();
-                        this.openModalSkill(skill);
+                        this.openModalSkill(skill, this.firstCard.name);
                         this.resetFirstcard();
 
                     } else if (skill.name === 'teleport') {
-                        this.firstCard.animation = 'teleport';
+                        this.firstCard.animation = 'teleport'; // mudar classe
                         this.teleport(this.firstCard);
-                        // this.openModalSkill(skill);
                     } else {
                         this.firstCard.fliped = false;
                         this.firstCard = null;
@@ -210,15 +237,14 @@ export class MainScreenComponent implements OnInit {
         }
     }
 
-    private openModalSkill(skill?: any) {
+    private openModalSkill(skill?: any, pokemonName?: string) {
         this.dialogRef.open(ModalSkillAlertComponent, {
             data: {
                 skill: skill,
-                pokemon: this.firstCard.name
+                pokemon: pokemonName
             }
         });
     }
-
 
     private resetGame() {
         this.reset = true;
@@ -257,8 +283,6 @@ export class MainScreenComponent implements OnInit {
             }, 470);
         }
     }
-
-
 
     private randomInterval(min: number, max: number) {
         return Math.floor(Math.random() * (max - min + 1) + min);

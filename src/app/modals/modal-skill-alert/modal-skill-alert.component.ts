@@ -16,7 +16,6 @@ export class ModalSkillAlertComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
     if (this.data) {
       this.skill = this.data.skill;
       this.pokemon = this.data.pokemon;
