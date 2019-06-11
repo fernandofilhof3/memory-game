@@ -16,7 +16,9 @@ export class ModalTutorialComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<ModalTutorialComponent>,
-  ) { }
+  ) {
+    dialogRef.disableClose = true;
+   }
 
   ngOnInit() {
     this.stepTitle = 'Cartas';

@@ -13,7 +13,9 @@ export class ModalSkillAlertComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<ModalSkillAlertComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  ) {
+    dialogRef.disableClose = true;
+   }
 
   ngOnInit() {
     if (this.data) {

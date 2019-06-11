@@ -101,7 +101,7 @@ export class MainScreenComponent implements OnInit {
 
         do {
             if (this.exceptionList.length > 0) {
-                if (!this.exceptionList.some(exception => exception.id === this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
+                if (this.exceptionList.some(exception => exception.id !== this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
                     destinyCard = this.cardList[i][j];
                     next = true;
                 } else {

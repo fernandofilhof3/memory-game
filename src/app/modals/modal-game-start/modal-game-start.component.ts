@@ -10,7 +10,9 @@ export class ModalGameStartComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<ModalGameStartComponent>,
-  ) { }
+  ) {
+    dialogRef.disableClose = true;
+   }
 
   ngOnInit() {
   }
