@@ -1,4 +1,4 @@
-import { CardSkill, Card } from "../models/card.model";
+import { CardSkill, Card } from '../models/card.model';
 
 export const PokemonsCards: Partial<Card>[] = [
     {
@@ -88,7 +88,18 @@ export const PokemonsCards: Partial<Card>[] = [
         skill: {
             damage: 1,
             name: 'teleport',
-            imgUrl: 'assets/images/ui/potion.gif'
+            imgUrl: 'assets/images/pokemons/abra.png'
         }
-    }
+    },
+    // {
+    //     id: 10,
+    //     name: 'venonat',
+    //     imgUrl: 'assets/images/pokemons/venonat.png',
+    //     skill: {
+    //         damage: 1,
+    //         duration: 3,
+    //         name: 'poison',
+    //         imgUrl: 'assets/images/ui/poison.gif'
+    //     }
+    // }
 ];

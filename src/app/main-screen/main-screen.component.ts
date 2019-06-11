@@ -27,7 +27,7 @@ export class MainScreenComponent implements OnInit {
     public avatarAnimation: string = '';
 
     public statusList: string[] = [];
-    public hp: number = 20;
+    public hp: number = 26;
     public reset: boolean = false;
     public start: boolean = false;
     public changed: boolean = false;
@@ -87,6 +87,7 @@ export class MainScreenComponent implements OnInit {
     }
 
     private teleport(card: Card) {
+        console.log(this.exceptionList);
 
         let originCard: any = card;
         let destinyCard;
@@ -96,7 +97,7 @@ export class MainScreenComponent implements OnInit {
 
         do {
             if (this.exceptionList.length > 0) {
-                if (this.exceptionList.some(exception => exception.id !== this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
+                if (!this.exceptionList.some(exception => exception.id === this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
                     destinyCard = this.cardList[i][j];
                     next = true;
                 } else {
@@ -115,6 +116,9 @@ export class MainScreenComponent implements OnInit {
         } while (!next);
         this.cardList[originCard.i][originCard.j] = destinyCard;
         this.cardList[i][j] = originCard;
+        this.exceptionList.forEach((card: DispositionCard) => {
+            this.cardList[card.i][card.j] = card;
+        });
 
         setTimeout(() => {
             this.firstCard.fliped = false;
@@ -144,10 +148,10 @@ export class MainScreenComponent implements OnInit {
 
     private checkPair(card: Card) {
         if (this.firstCard.id === this.secondCard.id) {
+            this.exceptionList = [...this.exceptionList, this.firstCard, this.secondCard];
             this.firstCard = null;
             this.secondCard = null;
             this.pairsFounded++;
-            this.exceptionList.push(card);
             this.checkWinCondition();
         } else {
             setTimeout(() => {
@@ -187,8 +191,8 @@ export class MainScreenComponent implements OnInit {
                 if (this.player.hp > 0) {
                     if (skill.name === 'burn') {
                         const chance = this.randomInterval(0, 3);
-                        if (chance > 0) {
-                            this.player.status = 1;
+                        if (chance > 0 && !this.player.status.some((status) => status === 1)) {
+                            this.player.status = [...this.player.status, 1];
                             this.statusList.push(skill.imgUrl);
                             this.effects.effectDuration = this.effects.currentRound + skill.duration;
                             this.openModalSkill(skill, this.firstCard.name);
@@ -208,6 +212,17 @@ export class MainScreenComponent implements OnInit {
                     } else if (skill.name === 'teleport') {
                         this.firstCard.animation = 'teleport'; // mudar classe
                         this.teleport(this.firstCard);
+
+                    } else if (skill.name === 'poison') {
+                        const chance = this.randomInterval(0, 4);
+                        if (chance > 0 && !this.player.status.some((status) => status === 3)) {
+                            this.player.status = [...this.player.status, 3];
+                            this.statusList.push(skill.imgUrl);
+                            this.effects.effectDuration = this.effects.currentRound + skill.duration;
+                            this.openModalSkill(skill, this.firstCard.name);
+                        }
+                        this.resetFirstcard();
+
                     } else {
                         this.firstCard.fliped = false;
                         this.firstCard = null;
@@ -219,10 +234,11 @@ export class MainScreenComponent implements OnInit {
 
     // ON TURN START
     private checkPlayerStatus() {
-        if (this.player.status === 1) {
+        if (this.player.status.some((status) => status === 1))
             this.applyEffects(1);
-        }
-        else if (this.player.status === 2)
+        else if (this.player.status.some((status) => status === 2))
+            this.applyEffects(2);
+        else if (this.player.status.some((status) => status === 3))
             this.applyEffects(2);
     }
 
@@ -230,9 +246,8 @@ export class MainScreenComponent implements OnInit {
         if (this.effects.effectDuration > this.effects.currentRound) {
             this.applyDamage(damage).subscribe();
             this.checkWinCondition();
-        }
-        else {
-            this.player.status = 0;
+        } else {
+            this.player.status = [];
             this.statusList = [];
         }
     }

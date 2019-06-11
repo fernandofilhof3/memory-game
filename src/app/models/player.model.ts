@@ -1,6 +1,6 @@
 export class Player {
-    hp: number = 20;
-    status: number = 0;
+    hp: number = 26;
+    status: number [] = [];
 
     constructor(obj?: Partial<Player>) {
         if (obj)
