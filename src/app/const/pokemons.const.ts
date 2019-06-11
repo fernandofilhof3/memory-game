@@ -63,14 +63,14 @@ export const PokemonsCards: Partial<Card>[] = [
             damage: 1
         }
     },
-    // {
-    //     id: 7,
-    //     name: 'Caterpie',
-    //     imgUrl: 'assets/images/pokemons/caterpie.png',
-    //     skill: {
-    //         damage: 1
-    //     }
-    // },
+    {
+        id: 7,
+        name: 'Caterpie',
+        imgUrl: 'assets/images/pokemons/caterpie.png',
+        skill: {
+            damage: 1
+        }
+    },
     {
         id: 8,
         name: 'Mankey',
@@ -91,15 +91,15 @@ export const PokemonsCards: Partial<Card>[] = [
             imgUrl: 'assets/images/pokemons/abra.png'
         }
     },
-    // {
-    //     id: 10,
-    //     name: 'venonat',
-    //     imgUrl: 'assets/images/pokemons/venonat.png',
-    //     skill: {
-    //         damage: 1,
-    //         duration: 3,
-    //         name: 'poison',
-    //         imgUrl: 'assets/images/ui/poison.gif'
-    //     }
-    // }
+    {
+        id: 10,
+        name: 'venonat',
+        imgUrl: 'assets/images/pokemons/venonat.png',
+        skill: {
+            damage: 1,
+            duration: 3,
+            name: 'poison',
+            imgUrl: 'assets/images/ui/poison.gif'
+        }
+    }
 ];

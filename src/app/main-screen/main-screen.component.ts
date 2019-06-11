@@ -61,8 +61,10 @@ export class MainScreenComponent implements OnInit {
     private createDeck() {
         let addedCards = [];
         this.cardList = [];
+        let initialPairs = 0;
         let iMax = 2;
         let jMax = 5;
+        let cardAmount: any;
         for (let i = 0; i <= iMax; i++) {
             this.cardList[i] = [];
             let canNext = false;
@@ -71,15 +73,18 @@ export class MainScreenComponent implements OnInit {
                     min = 0,
                     max = PokemonsCards.length - 1;
                 do {
+                    cardAmount = null;
                     card = PokemonsCards[this.randomInterval(min, max)];
 
-                    let cardAmount = addedCards.filter((x) => x.id === card.id).length;
-                    canNext = cardAmount === 1 || (cardAmount === 0 && !(i === iMax && j === (jMax - 2)));
+                    cardAmount = addedCards.filter((x) => x.id === card.id).length;
+                    canNext = cardAmount === 1 || ((cardAmount === 0 && initialPairs < 9) && !(i === iMax && j === (jMax - 2)));
                 } while (!canNext);
+                initialPairs = cardAmount === 0 ? initialPairs + 1 : initialPairs;
                 this.cardList[i][j] = card;
                 addedCards.push(card);
             }
         }
+
     }
 
     private arrayChanged() {
