@@ -27,7 +27,7 @@ export class MainScreenComponent implements OnInit {
     public avatarAnimation: string = '';
 
     public statusList: string[] = [];
-    public hp: number = 26;
+    public hp: number = 24;
     public reset: boolean = false;
     public start: boolean = false;
     public changed: boolean = false;
@@ -92,7 +92,6 @@ export class MainScreenComponent implements OnInit {
     }
 
     private teleport(card: Card) {
-        console.log(this.exceptionList);
 
         let originCard: any = card;
         let destinyCard;
@@ -149,7 +148,6 @@ export class MainScreenComponent implements OnInit {
         }
 
     }
-
 
     private checkPair(card: Card) {
         if (this.firstCard.id === this.secondCard.id) {

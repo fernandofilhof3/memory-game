@@ -22,7 +22,7 @@ export class ModalSkillAlertComponent implements OnInit {
     }
     setTimeout(() => {
       this.dialogRef.close();
-    }, 1400);
+    }, 1000);
   }
 
 }
