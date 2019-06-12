@@ -48,8 +48,6 @@ export class MainScreenComponent implements OnInit {
         this.openModalTutorial();
     }
 
-
-
     private openModalTutorial() {
         this.dialogRef.open(ModalGameStartComponent).afterClosed().subscribe(ok => {
             if (ok) {
@@ -101,7 +99,7 @@ export class MainScreenComponent implements OnInit {
 
         do {
             if (this.exceptionList.length > 0) {
-                if (this.exceptionList.some(exception => exception.id !== this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
+                if (!this.exceptionList.some(exception => exception.id === this.cardList[i][j].id) && this.cardList[i][j].id !== originCard.id) {
                     destinyCard = this.cardList[i][j];
                     next = true;
                 } else {
@@ -146,7 +144,6 @@ export class MainScreenComponent implements OnInit {
         } else {
             card.fliped = false;
         }
-
     }
 
     private checkPair(card: Card) {
@@ -158,13 +155,14 @@ export class MainScreenComponent implements OnInit {
             this.checkWinCondition();
         } else {
             setTimeout(() => {
-                this.checkPokemonSkill(this.firstCard.skill);
+                if (this.player.hp > 0)
+                    this.checkPokemonSkill(this.firstCard.skill);
                 this.secondCard.fliped = false;
                 this.secondCard = null;
             }, 850);
         }
-        this.effects.currentRound++;
         this.checkPlayerStatus();
+        this.effects.currentRound++;
     }
 
     private applyDamage(damage: number, skill?: string) {
@@ -193,7 +191,7 @@ export class MainScreenComponent implements OnInit {
             tap(() => {
                 if (this.player.hp > 0) {
                     if (skill.name === 'burn') {
-                        const chance = this.randomInterval(0, 3);
+                        const chance = this.randomInterval(1, 3);
                         if (chance > 0 && !this.player.status.some((status) => status === 1)) {
                             this.player.status = [...this.player.status, 1];
                             this.statusList.push(skill.imgUrl);
@@ -237,18 +235,19 @@ export class MainScreenComponent implements OnInit {
 
     // ON TURN START
     private checkPlayerStatus() {
-        if (this.player.status.some((status) => status === 1))
+        if (this.player.hp > 0) {
+            if (this.player.status.some((status) => status === 1))
             this.applyEffects(1);
-        else if (this.player.status.some((status) => status === 2))
+            else if (this.player.status.some((status) => status === 2))
             this.applyEffects(2);
-        else if (this.player.status.some((status) => status === 3))
+            else if (this.player.status.some((status) => status === 3))
             this.applyEffects(2);
+        }
     }
 
     private applyEffects(damage: number) {
         if (this.effects.effectDuration > this.effects.currentRound) {
             this.applyDamage(damage).subscribe();
-            this.checkWinCondition();
         } else {
             this.player.status = [];
             this.statusList = [];
@@ -297,7 +296,6 @@ export class MainScreenComponent implements OnInit {
                     if (ok)
                         this.resetGame();
                 });
-                return;
             }, 470);
         }
     }
