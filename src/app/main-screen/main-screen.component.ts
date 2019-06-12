@@ -268,6 +268,8 @@ export class MainScreenComponent implements OnInit {
         this.pairsFounded = 0;
         this.statusList = [];
         this.player = new Player();
+        this.firstCard = null;
+        this.secondCard = null;
         setTimeout(() => {
             this.createDeck();
         }, 400);
