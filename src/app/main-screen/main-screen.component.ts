@@ -119,7 +119,6 @@ export class MainScreenComponent implements OnInit {
         this.cardList[originCard.i][originCard.j] = destinyCard;
         this.cardList[i][j] = originCard;
         this.exceptionList.forEach((card: DispositionCard) => {
-            console.log(card);
             this.cardList[card.i][card.j].fliped = true;
         });
 
