@@ -32,18 +32,18 @@ export class ModalTutorialComponent implements OnInit {
     if (this.currentStep === 2) {
       this.stepTitle = 'Jogador';
       this.showDescription = false;
-      this.stepBody = `O jogador é representado por uma barra de vida encontrada no canto inferior direito da tela.
+      this.stepBody = `O jogador é representado por uma barra de vida encontrada no canto superior direito da tela.
       <br/>A barra possui <strong>24 de HP</strong> e diminui toda vez que você erra ao formar um par.`;
     } else if (this.currentStep === 3) {
       this.stepTitle = 'Mecânica';
       this.showDescription = false;
       this.stepBody = `Ao virar uma carta, você entra em batalha com o pokémon, caso você erre ao formar o par irá receber
-      como dano, o ataque do pokemon da primeira carta <br/> Ex: Você virou um <strong>Pikachu</strong> e um <strong>Eevee</strong>,
+      como dano, o ataque do pokemon da primeira carta virada. Ex: Você virou um <strong>Pikachu</strong> e um <strong>Eevee</strong>,
        você irá receber 2 de dano do <strong>Pikachu</strong>. Caso forme um par você não receberá dano.`;
     } else if (this.currentStep === 4) {
       this.stepTitle = 'Mecânica';
       this.showDescription = false;
-      this.stepBody = `Errar um par também pode fazer com que um pokémon use sua habilidade
+      this.stepBody = `Errar um par também pode fazer com que um pokémon use sua habilidade,
       cada habilidade muda com o pokémon e variam de causar dano extra até reembaralhar as cartas no tabuleiro.`;
     } else if (this.currentStep === 5) {
       this.stepTitle = 'Tutorial';

@@ -146,6 +146,13 @@ export class MainScreenComponent implements OnInit {
         }
     }
 
+    public usePotion() {
+        if (this.player.bag.potion > 0 && this.player.hp < 24) {
+            this.player.hp + 4 > 24 ? this.player.hp = 24 : this.player.hp += 4;
+            this.player.bag.potion--;
+        }
+    }
+
     private checkPair(card: Card) {
         if (this.firstCard.id === this.secondCard.id) {
             this.exceptionList = [...this.exceptionList, this.firstCard, this.secondCard];

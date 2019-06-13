@@ -6,6 +6,15 @@
                 <app-hp-bar [total]="hp" [status-list]="statusList" [value]="player.hp"></app-hp-bar>
             </div>
         </div>
+        <div class="col-12">
+            <div class="bag-area f-right">
+                <img class="bag" src="assets/images/ui/backpack.png">
+            </div>
+            <div class="items-area f-right">
+                <img [ngClass]="{'disable': player.bag.potion < 1}" class="items" (click)="usePotion()" src="assets/images/ui/potion.png">
+                <p>{{player.bag.potion > 0 ? player.bag.potion + 'x' : 0}}</p>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-12">
