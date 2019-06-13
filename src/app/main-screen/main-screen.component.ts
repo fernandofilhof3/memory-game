@@ -119,7 +119,8 @@ export class MainScreenComponent implements OnInit {
         this.cardList[originCard.i][originCard.j] = destinyCard;
         this.cardList[i][j] = originCard;
         this.exceptionList.forEach((card: DispositionCard) => {
-            this.cardList[card.i][card.j] = card;
+            console.log(card);
+            this.cardList[card.i][card.j].fliped = true;
         });
 
         setTimeout(() => {
@@ -148,7 +149,7 @@ export class MainScreenComponent implements OnInit {
 
     public usePotion() {
         if (this.player.bag.potion > 0 && this.player.hp < 24) {
-            this.player.hp + 4 > 24 ? this.player.hp = 24 : this.player.hp += 4;
+            this.player.hp + 3 > 24 ? this.player.hp = 24 : this.player.hp += 3;
             this.player.bag.potion--;
         }
     }
@@ -274,6 +275,7 @@ export class MainScreenComponent implements OnInit {
         this.reset = true;
         this.pairsFounded = 0;
         this.statusList = [];
+        this.exceptionList = [];
         this.player = new Player();
         this.firstCard = null;
         this.secondCard = null;
