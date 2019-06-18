@@ -55,11 +55,30 @@
   height: 54px;
   opacity: 1;
   transition: opacity .7s ease-in-out;
+
   &.teleport {
     opacity: 0;
   }
-  
+
+  &.capture {
+    transition: opacity .2s ease-in-out;
+    opacity: 0;
+
+    &.try {
+      opacity: 1;
+    }
+  }
 }
+
+
+.alert-capture {
+  width: 54px;
+  height: 54px;
+  position: absolute;
+  left: 20%;
+  transition: all .6s ease-in;
+}
+
 
 .d-table {
   display: table;
@@ -85,7 +104,6 @@
     background-color: #d70809e0;
     box-sizing: border-box;
   }
-
 
   &.front {}
 }

@@ -14,6 +14,10 @@
                 <img [ngClass]="{'disable': player.bag.potion < 1}" class="items" (click)="usePotion()" src="assets/images/ui/potion.png">
                 <p>{{player.bag.potion > 0 ? player.bag.potion + 'x' : 0}}</p>
             </div>
+            <div class="items-area f-right">
+                <img [ngClass]="{'disable': player.bag.pokeballs.normal < 1}" class="items" (click)="usePokeball('normal')" src="assets/images/ui/pokeball.png">
+                <p>{{player.bag.pokeballs.normal > 0 ? player.bag.pokeballs.normal  + 'x' : 0}}</p>
+            </div>
         </div>
     </div>
     <div class="row">

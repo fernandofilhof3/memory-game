@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChildren, QueryList } from '@angular/core';
 import { PokemonsCards } from '../const/pokemons.const';
 import { Card, CardSkill } from '../models/card.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { ModalSkillAlertComponent } from '../modals/modal-skill-alert/modal-skil
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DispositionCard } from '../models/disposition-card.model';
+import { CardComponent } from '../card/card.component';
 
 @Component({
     selector: 'app-main-screen',
@@ -17,11 +18,14 @@ import { DispositionCard } from '../models/disposition-card.model';
     styleUrls: ['./main-screen.component.scss']
 })
 export class MainScreenComponent implements OnInit {
+    @ViewChildren(CardComponent) private cardQuery: QueryList<CardComponent>;
+
+    private get cardsComponents() { return this.cardQuery.toArray(); }
 
     public pokemonConst = PokemonsCards;
     public cardList: Card[][] = [];
     public player: Player = new Player();
-    public firstCard: Card;
+    public firstCard: DispositionCard;
     public secondCard: Card;
     private pairsFounded: number = 0;
     public avatarAnimation: string = '';
@@ -31,6 +35,9 @@ export class MainScreenComponent implements OnInit {
     public reset: boolean = false;
     public start: boolean = false;
     public changed: boolean = false;
+
+    private iMax: number = 2;
+    private jMax: number = 5;
 
     private exceptionList: Card[] = [];
 
@@ -45,7 +52,7 @@ export class MainScreenComponent implements OnInit {
 
     ngOnInit() {
         this.createDeck();
-        this.openModalTutorial();
+        // this.openModalTutorial();
     }
 
     private openModalTutorial() {
@@ -60,13 +67,11 @@ export class MainScreenComponent implements OnInit {
         let addedCards = [];
         this.cardList = [];
         let initialPairs = 0;
-        let iMax = 2;
-        let jMax = 5;
         let cardAmount: any;
-        for (let i = 0; i <= iMax; i++) {
+        for (let i = 0; i <= this.iMax; i++) {
             this.cardList[i] = [];
             let canNext = false;
-            for (let j = 0; j <= jMax; j++) {
+            for (let j = 0; j <= this.jMax; j++) {
                 let card = null,
                     min = 0,
                     max = PokemonsCards.length - 1;
@@ -75,7 +80,7 @@ export class MainScreenComponent implements OnInit {
                     card = PokemonsCards[this.randomInterval(min, max)];
 
                     cardAmount = addedCards.filter((x) => x.id === card.id).length;
-                    canNext = cardAmount === 1 || ((cardAmount === 0 && initialPairs < 9) && !(i === iMax && j === (jMax - 2)));
+                    canNext = cardAmount === 1 || ((cardAmount === 0 && initialPairs < 9) && !(i === this.iMax && j === (this.jMax - 2)));
                 } while (!canNext);
                 initialPairs = cardAmount === 0 ? initialPairs + 1 : initialPairs;
                 this.cardList[i][j] = card;
@@ -147,10 +152,70 @@ export class MainScreenComponent implements OnInit {
     }
 
     public usePotion() {
-        if (this.player.bag.potion > 0 && this.player.hp < 24) {
-            this.player.hp + 3 > 24 ? this.player.hp = 24 : this.player.hp += 3;
+        if (this.player.bag.potion > 0 && this.player.hp < this.hp) {
+            this.player.hp + 3 > this.hp ? this.player.hp = 24 : this.player.hp += 3;
             this.player.bag.potion--;
         }
+    }
+
+    public usePokeball(type: string) {
+        if (this.player.bag.pokeballs[type] < 1 || !this.firstCard)
+            return false;
+        this.player.bag.pokeballs.normal--;
+        const possibilities = this.randomInterval(1, 100);
+        if (type === 'normal') {
+            possibilities > 34 ? this.capturePokemon(false) : this.capturePokemon(true);
+        } else if (type === 'super') {
+            possibilities > 55 ? this.capturePokemon(false) : this.capturePokemon(true);
+        } else if (type === 'ultra')
+            this.capturePokemon(true);
+    }
+
+    private capturePokemon(success: boolean) {
+        // Do ANIMATION HERE
+
+        let imgOrigin = this.firstCard.imgUrl;
+        this.firstCard.animation = 'capture';
+        if (!success) {
+            this.firstCard.animation = 'capture try';
+            this.firstCard.imgUrl = 'assets/images/ui/pokeball.gif';
+            setTimeout(() => {
+                this.firstCard.animation = '';
+                this.firstCard.imgUrl = imgOrigin;
+                this.openModalSkill(null, this.firstCard.name, true);
+            }, 1400);
+        } else {
+            let firstI = this.firstCard.i;
+            let firstJ = this.firstCard.j;
+
+            for (let i = 0; i < this.cardList.length; i++) {
+                for (let j = 0; j < this.cardList[i].length; j++) {
+                    if (this.cardList[i][j].id === this.firstCard.id && !this.cardList[i][j].fliped && (firstI !== i || firstJ !== j)) {
+                        // this.firstCard.imgUrl = 'assets/images/ui/pokeball.gif';
+                        this.firstCard.animation = 'capture try';
+                        this.firstCard.imgUrl = 'assets/images/ui/pokeball.gif';
+                        setTimeout(() => {
+                            this.firstCard.animation = 'gotcha';
+                            this.firstCard.imgUrl = 'assets/images/ui/pokeball.png';
+                            setTimeout(() => {
+                                this.firstCard.imgUrl = imgOrigin;
+                                let card = this.getCardFromComponents(i, j);
+                                card.flipCard();
+                                this.firstCard.animation = '';
+                                this.cardList[i][j].fliped = true;
+                                this.setCardValue(this.cardList[i][j]);
+                            }, 800);
+                        }, 1400);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private getCardFromComponents(i: number, j: number) {
+        const index = (i * (this.jMax + 1)) + j;
+        return this.cardsComponents[index];
     }
 
     private checkPair(card: Card) {
@@ -244,11 +309,11 @@ export class MainScreenComponent implements OnInit {
     private checkPlayerStatus() {
         if (this.player.hp > 0) {
             if (this.player.status.some((status) => status === 1))
-            this.applyEffects(1);
+                this.applyEffects(1);
             else if (this.player.status.some((status) => status === 2))
-            this.applyEffects(2);
+                this.applyEffects(2);
             else if (this.player.status.some((status) => status === 3))
-            this.applyEffects(2);
+                this.applyEffects(2);
         }
     }
 
@@ -261,13 +326,23 @@ export class MainScreenComponent implements OnInit {
         }
     }
 
-    private openModalSkill(skill?: any, pokemonName?: string) {
-        this.dialogRef.open(ModalSkillAlertComponent, {
-            data: {
-                skill: skill,
-                pokemon: pokemonName
-            }
-        });
+    private openModalSkill(skill?: any, pokemonName?: string, scape?: boolean) {
+        if (scape) {
+            this.dialogRef.open(ModalSkillAlertComponent, {
+                data: {
+                    pokemon: pokemonName,
+                    scape: scape
+                }
+            });
+        } else {
+            this.dialogRef.open(ModalSkillAlertComponent, {
+                data: {
+                    skill: skill,
+                    pokemon: pokemonName
+                }
+            });
+        }
+
     }
 
     private resetGame() {

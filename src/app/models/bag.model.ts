@@ -1,6 +1,8 @@
+import { Pokeballs } from "./pokeballs.model";
+
 export class Bag {
     potion: number = 3;
-    pokeball?: number;
+    pokeballs: Pokeballs = new Pokeballs();
 
     constructor(obj?: Partial<Bag>) {
         if (obj)

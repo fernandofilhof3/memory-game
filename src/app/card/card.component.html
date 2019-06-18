@@ -8,8 +8,8 @@
             </div>
         </div>
         <div class="card front"> 
+            <img *ngIf="card.animation === 'gotcha'" class="alert-capture" src="assets/images/ui/gotcha.png">
             <div class="d-table card-style">
-                <!-- <img [ngClass]="card.animation" class="back-logo" src="/assets/images/ui/gotcha.png"> -->
                 <div class="d-table-cell front">
                     <img [ngClass]="card.animation" class="back-logo" [src]="card.imgUrl">
                 </div>
