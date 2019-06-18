@@ -18,6 +18,10 @@
                 <img [ngClass]="{'disable': player.bag.pokeballs.normal < 1}" class="items" (click)="usePokeball('normal')" src="assets/images/ui/pokeball.png">
                 <p>{{player.bag.pokeballs.normal > 0 ? player.bag.pokeballs.normal  + 'x' : 0}}</p>
             </div>
+            <div class="items-area f-right">
+                <img [ngClass]="{'disable': player.bag.pokeballs.super < 1}" class="items" (click)="usePokeball('super')" src="assets/images/ui/superball.png">
+                <p>{{player.bag.pokeballs.super > 0 ? player.bag.pokeballs.super  + 'x' : 0}}</p>
+            </div>
         </div>
     </div>
     <div class="row">

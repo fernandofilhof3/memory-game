@@ -161,12 +161,12 @@ export class MainScreenComponent implements OnInit {
     public usePokeball(type: string) {
         if (this.player.bag.pokeballs[type] < 1 || !this.firstCard)
             return false;
-        this.player.bag.pokeballs.normal--;
+        this.player.bag.pokeballs[type]--;
         const possibilities = this.randomInterval(1, 100);
         if (type === 'normal') {
-            possibilities > 34 ? this.capturePokemon(false) : this.capturePokemon(true);
+            possibilities > 40 ? this.capturePokemon(false) : this.capturePokemon(true);
         } else if (type === 'super') {
-            possibilities > 55 ? this.capturePokemon(false) : this.capturePokemon(true);
+            possibilities > 65 ? this.capturePokemon(false) : this.capturePokemon(true);
         } else if (type === 'ultra')
             this.capturePokemon(true);
     }

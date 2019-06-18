@@ -1,6 +1,6 @@
 export class Pokeballs {
     normal: number = 3;
-    super: number;
+    super: number = 1;
     ultra: number;
 
     constructor(obj?: Partial<Pokeballs>) {
