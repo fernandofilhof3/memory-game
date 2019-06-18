@@ -23,7 +23,7 @@ export class MainScreenComponent implements OnInit {
     private get cardsComponents() { return this.cardQuery.toArray(); }
 
     public pokemonConst = PokemonsCards;
-    public cardList: Card[][] = [];
+    public cardList: DispositionCard[][] = [];
     public player: Player = new Player();
     public firstCard: DispositionCard;
     public secondCard: Card;
@@ -124,6 +124,7 @@ export class MainScreenComponent implements OnInit {
         this.cardList[originCard.i][originCard.j] = destinyCard;
         this.cardList[i][j] = originCard;
         this.exceptionList.forEach((card: DispositionCard) => {
+            console.log(card);
             this.cardList[card.i][card.j].fliped = true;
         });
 
@@ -203,6 +204,8 @@ export class MainScreenComponent implements OnInit {
                                 card.flipCard();
                                 this.firstCard.animation = '';
                                 this.cardList[i][j].fliped = true;
+                                this.cardList[i][j].i = i;
+                                this.cardList[i][j].j = j;
                                 this.setCardValue(this.cardList[i][j]);
                             }, 800);
                         }, 1400);
