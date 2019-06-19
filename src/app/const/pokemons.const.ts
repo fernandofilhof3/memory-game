@@ -83,7 +83,7 @@ export const PokemonsCards: Partial<Card>[] = [
     },
     {
         id: 9,
-        name: 'Abra',
+        name: 'abra',
         imgUrl: 'assets/images/pokemons/abra.png',
         skill: {
             damage: 1,

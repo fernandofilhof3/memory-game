@@ -40,6 +40,7 @@ export class MainScreenComponent implements OnInit {
     private jMax: number = 5;
 
     private exceptionList: Card[] = [];
+    private captureMode: boolean = false;
 
     private effects = {
         currentRound: 0,
@@ -139,8 +140,58 @@ export class MainScreenComponent implements OnInit {
         }, 700);
     }
 
+    private confusion() {
+        let cardsChanged = this.exceptionList;
+        let finished = false;
+        do {
+            // debugger;
+            let originI = this.randomInterval(0, 2);
+            let originJ = this.randomInterval(0, 5);
+            let destinyI = this.randomInterval(0, 2);
+            let destinyJ = this.randomInterval(0, 5);
+
+            let cardOrigin = this.cardList[originI][originJ];
+            let cardDestiny = this.cardList[destinyI][destinyJ];
+
+            let originAmount = cardsChanged.filter(card => card.id === cardOrigin.id).length;
+            let destinyAmount = cardsChanged.filter(card => card.id === cardDestiny.id).length;
+
+            if (cardsChanged.some(card => {card.id !== cardOrigin.id && card.id !== cardDestiny.id}) && cardOrigin.id !== cardDestiny.id && originAmount < 2 && destinyAmount < 2) {
+                this.cardList[destinyI][destinyJ] = cardOrigin;
+                this.cardList[originI][originJ] = cardDestiny;
+                cardsChanged = [...cardsChanged, cardDestiny, cardOrigin];
+                finished = cardsChanged.length < 18 ? false : true;
+            } else {
+                console.log('else');
+            }
+
+        } while (!finished);
+        this.exceptionList.forEach((card: DispositionCard) => {
+            console.log(card);
+            this.cardList[card.i][card.j].fliped = true;
+        });
+
+        setTimeout(() => {
+            let pokemon = this.firstCard;
+            this.firstCard.fliped = false;
+            this.firstCard.animation = '';
+            setTimeout(() => {
+                this.firstCard = null;
+                this.arrayChanged();
+                this.openModalSkill(pokemon.skill, pokemon.name);
+            }, 250);
+        }, 700);
+
+        // this.arrayChanged();
+        let teste = [];
+        cardsChanged.forEach(element => {
+            teste = [...teste, element.id];
+        });
+        console.log(teste.sort());
+    }
+
     public setCardValue(card: any) {
-        if (!this.firstCard || !this.secondCard) {
+        if ((!this.firstCard || !this.secondCard) && !this.captureMode) {
             if (!this.firstCard)
                 this.firstCard = card;
             else {
@@ -160,29 +211,34 @@ export class MainScreenComponent implements OnInit {
     }
 
     public usePokeball(type: string) {
-        if (this.player.bag.pokeballs[type] < 1 || !this.firstCard)
+        if (this.player.bag.pokeballs[type] < 1 || !this.firstCard || this.captureMode || this.secondCard)
             return false;
         this.player.bag.pokeballs[type]--;
+        let imgBall = '';
         const possibilities = this.randomInterval(1, 100);
+        this.captureMode = true;
         if (type === 'normal') {
-            possibilities > 40 ? this.capturePokemon(false) : this.capturePokemon(true);
+            imgBall = 'assets/images/ui/pokeball.png';
+            possibilities > 40 ? this.capturePokemon(false, imgBall) : this.capturePokemon(true, imgBall);
         } else if (type === 'super') {
-            possibilities > 65 ? this.capturePokemon(false) : this.capturePokemon(true);
+            imgBall = 'assets/images/ui/superball.png';
+            possibilities > 65 ? this.capturePokemon(false, imgBall) : this.capturePokemon(true, imgBall);
         } else if (type === 'ultra')
-            this.capturePokemon(true);
+            this.capturePokemon(true, imgBall);
     }
 
-    private capturePokemon(success: boolean) {
+    private capturePokemon(success: boolean, pokeballUrl: string) {
         // Do ANIMATION HERE
 
         let imgOrigin = this.firstCard.imgUrl;
         this.firstCard.animation = 'capture';
         if (!success) {
             this.firstCard.animation = 'capture try';
-            this.firstCard.imgUrl = 'assets/images/ui/pokeball.gif';
+            this.firstCard.imgUrl = pokeballUrl;
             setTimeout(() => {
                 this.firstCard.animation = '';
                 this.firstCard.imgUrl = imgOrigin;
+                this.captureMode = false;
                 this.openModalSkill(null, this.firstCard.name, true);
             }, 1400);
         } else {
@@ -192,12 +248,10 @@ export class MainScreenComponent implements OnInit {
             for (let i = 0; i < this.cardList.length; i++) {
                 for (let j = 0; j < this.cardList[i].length; j++) {
                     if (this.cardList[i][j].id === this.firstCard.id && !this.cardList[i][j].fliped && (firstI !== i || firstJ !== j)) {
-                        // this.firstCard.imgUrl = 'assets/images/ui/pokeball.gif';
                         this.firstCard.animation = 'capture try';
-                        this.firstCard.imgUrl = 'assets/images/ui/pokeball.gif';
+                        this.firstCard.imgUrl = pokeballUrl;
                         setTimeout(() => {
                             this.firstCard.animation = 'gotcha';
-                            this.firstCard.imgUrl = 'assets/images/ui/pokeball.png';
                             setTimeout(() => {
                                 this.firstCard.imgUrl = imgOrigin;
                                 let card = this.getCardFromComponents(i, j);
@@ -206,6 +260,7 @@ export class MainScreenComponent implements OnInit {
                                 this.cardList[i][j].fliped = true;
                                 this.cardList[i][j].i = i;
                                 this.cardList[i][j].j = j;
+                                this.captureMode = false;
                                 this.setCardValue(this.cardList[i][j]);
                             }, 800);
                         }, 1400);
@@ -275,9 +330,12 @@ export class MainScreenComponent implements OnInit {
                         }
                         this.resetFirstcard();
                     } else if (skill.name === 'confusion') {
-                        const chance = this.randomInterval(0, 5);
+                        const chance = this.randomInterval(1, 100);
+                        if (chance > 0) {
+                            this.confusion();
+                        }
                         this.firstCard.fliped = false;
-                        this.firstCard = null;
+                        // this.firstCard = null;
 
                     } else if (skill.name === 'multiStrike') {
                         const hits = this.randomInterval(2, 3);

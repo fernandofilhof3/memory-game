@@ -2,7 +2,7 @@
     <div [ngClass]="card.fliped ? 'flip-poke-card' : ''" class="poke-card">
         <div class="card back"> 
             <div class="d-table card-style">
-                <div class="d-table-cell back">
+                <div [ngClass]="card.name" class="d-table-cell back">
                     <img class="back-logo" src="assets/images/ui/pokeball.png">
                 </div>
             </div>
