@@ -156,7 +156,7 @@ export class MainScreenComponent implements OnInit {
             let originAmount = cardsChanged.filter(card => card.id === cardOrigin.id).length;
             let destinyAmount = cardsChanged.filter(card => card.id === cardDestiny.id).length;
 
-            if (cardsChanged.some(card => {card.id !== cardOrigin.id && card.id !== cardDestiny.id}) && cardOrigin.id !== cardDestiny.id && originAmount < 2 && destinyAmount < 2) {
+            if (!cardsChanged.some(card => (card.id === cardOrigin.id && card.id === cardDestiny.id)) && cardOrigin.id !== cardDestiny.id && originAmount < 2 && destinyAmount < 2) {
                 this.cardList[destinyI][destinyJ] = cardOrigin;
                 this.cardList[originI][originJ] = cardDestiny;
                 cardsChanged = [...cardsChanged, cardDestiny, cardOrigin];
