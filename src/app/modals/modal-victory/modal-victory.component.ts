@@ -23,7 +23,7 @@ export class ModalVictoryComponent implements OnInit {
   private setModalText() {
     if (this.data.win) {
         this.title = 'Parabéns!';
-        this.text = 'Parabéns você capturou todos!';
+        this.text = 'você capturou todos.';
     } else {
         this.title = 'Derrota';
         this.text = 'Você não ganhou dessa vez, mas não desista.';

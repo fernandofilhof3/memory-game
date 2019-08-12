@@ -125,7 +125,6 @@ export class MainScreenComponent implements OnInit {
         this.cardList[originCard.i][originCard.j] = destinyCard;
         this.cardList[i][j] = originCard;
         this.exceptionList.forEach((card: DispositionCard) => {
-            console.log(card);
             this.cardList[card.i][card.j].fliped = true;
         });
 
@@ -161,13 +160,10 @@ export class MainScreenComponent implements OnInit {
                 this.cardList[originI][originJ] = cardDestiny;
                 cardsChanged = [...cardsChanged, cardDestiny, cardOrigin];
                 finished = cardsChanged.length < 18 ? false : true;
-            } else {
-                console.log('else');
             }
 
         } while (!finished);
         this.exceptionList.forEach((card: DispositionCard) => {
-            console.log(card);
             this.cardList[card.i][card.j].fliped = true;
         });
 
@@ -175,6 +171,7 @@ export class MainScreenComponent implements OnInit {
             let pokemon = this.firstCard;
             this.firstCard.fliped = false;
             this.firstCard.animation = '';
+            pokemon.skill.imgUrl = pokemon.imgUrl;
             setTimeout(() => {
                 this.firstCard = null;
                 this.arrayChanged();
@@ -187,7 +184,6 @@ export class MainScreenComponent implements OnInit {
         cardsChanged.forEach(element => {
             teste = [...teste, element.id];
         });
-        console.log(teste.sort());
     }
 
     public setCardValue(card: any) {
