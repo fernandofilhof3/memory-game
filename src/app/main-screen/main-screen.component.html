@@ -8,7 +8,7 @@
         </div>
         <div class="col-12">
             <div class="bag-area f-right">
-                <img class="bag" src="assets/images/ui/backpack.png">
+                <img class="bag" (click)="play()" src="assets/images/ui/backpack.png">
             </div>
             <div class="items-area f-right">
                 <img [ngClass]="{'disable': player.bag.potion < 1}" class="items" (click)="usePotion()" src="assets/images/ui/potion.png">

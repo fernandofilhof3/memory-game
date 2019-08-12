@@ -41,6 +41,7 @@ export class MainScreenComponent implements OnInit {
 
     private exceptionList: Card[] = [];
     private captureMode: boolean = false;
+    private musicPlayer = new Audio('assets/audio/main-theme.mp3');
 
     private effects = {
         currentRound: 0,
@@ -444,6 +445,12 @@ export class MainScreenComponent implements OnInit {
 
     private randomInterval(min: number, max: number) {
         return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    public play() {
+        this.musicPlayer.volume = 0.2;
+        this.musicPlayer.loop = true;
+        this.musicPlayer.play();
     }
 
 }
